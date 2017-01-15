@@ -19,10 +19,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
+import android.content.Context;
 
 import java.net.URL;
 import java.io.IOException;
 import com.example.android.sunshine.utilities.NetworkUtils;
+import com.example.android.sunshine.data.SunshinePreferences;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,9 +45,16 @@ public class MainActivity extends AppCompatActivity {
         // TODO (3) Delete the for loop that populates the TextView with dummy data. Both deleted
 
         // TODO (9) Call loadWeatherData to perform the network request to get the weather
+        loadWeatherData();
     }
 
     // TODO (8) Create a method that will get the user's preferred location and execute your new AsyncTask and call it loadWeatherData
+    private void loadWeatherData() {
+        Context context = MainActivity.this;
+        String locationQuery = SunshinePreferences.getPreferredWeatherLocation(context);
+        URL locationSearchURL = NetworkUtils.buildUrl(locationQuery);
+        new weatherQueryTask().execute(locationSearchURL);
+    }
 
     // TODO (5) Create a class that extends AsyncTask to perform network requests
     public class weatherQueryTask extends AsyncTask<URL, Void, String> {
